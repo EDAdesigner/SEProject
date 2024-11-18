@@ -16,15 +16,15 @@ public class SelectCourse extends JFrame implements ActionListener {
     String studentId;
 
     public SelectCourse(String studentId) {
-        super("Ñ¡¿Î");
+        super("é€‰è¯¾");
         this.studentId = studentId;
         setSize(300, 200);
         setLocation(600, 400);
         contain = new JPanel();
         contain.setLayout(null);
-        courseIdLabel = new JLabel("¿Î³ÌºÅ");
+        courseIdLabel = new JLabel("è¯¾ç¨‹å·");
         courseIdField = new JTextField();
-        submit = new JButton("Ìá½»");
+        submit = new JButton("æäº¤");
 
         courseIdLabel.setBounds(42, 45, 75, 35);
         courseIdField.setBounds(80, 45, 150, 35);
@@ -43,15 +43,15 @@ public class SelectCourse extends JFrame implements ActionListener {
         if (e.getSource() == submit) {
             String courseId = courseIdField.getText();
             if (courseId.equals("")) {
-                JOptionPane.showMessageDialog(null, "¿Î³ÌºÅ²»ÄÜÎª¿Õ£¡", "ÌáÊ¾", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "è¯¾ç¨‹å·ä¸èƒ½ä¸ºç©ºï¼", "æç¤º", JOptionPane.INFORMATION_MESSAGE);
             } else if (!courseExists(courseId)) {
-                JOptionPane.showMessageDialog(null, "¿Î³ÌºÅ²»´æÔÚ£¡", "ÌáÊ¾", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "è¯¾ç¨‹å·ä¸å­˜åœ¨ï¼", "æç¤º", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 String file = System.getProperty("user.dir") + "/data/course_student" + courseId + "_student.txt";
                 try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))) {
                     bw.write(studentId);
                     bw.newLine();
-                    JOptionPane.showMessageDialog(null, "Ñ¡¿Î³É¹¦£¡", "ÌáÊ¾", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "é€‰è¯¾æˆåŠŸï¼", "æç¤º", JOptionPane.INFORMATION_MESSAGE);
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }

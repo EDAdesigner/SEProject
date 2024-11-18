@@ -12,7 +12,7 @@ import java.util.ArrayList;
 @SuppressWarnings("serial")
 public class AddUser extends JFrame implements ActionListener {
 	/*
-	 * ½ÌÎñ¹ÜÀíÔ±Ìí¼ÓÓÃ»§£¬¿ÉÒÔÌí¼ÓÑ§Éú£¬½ÌÊ¦£¬¹ÜÀíÔ±
+	 * æ•™åŠ¡ç®¡ç†å‘˜æ·»åŠ ç”¨æˆ·ï¼Œå¯ä»¥æ·»åŠ å­¦ç”Ÿï¼Œæ•™å¸ˆï¼Œç®¡ç†å‘˜
 	 */
 	JPanel contain;
 	JLabel id, name, birthday, institute, major;
@@ -26,21 +26,21 @@ public class AddUser extends JFrame implements ActionListener {
 	//String file = "D://test//";
 
 	public AddUser() {
-		super("Ìí¼ÓÓÃ»§");
+		super("æ·»åŠ ç”¨æˆ·");
 		setSize(300, 350);
 		setLocation(600, 400);
 		contain = new JPanel();
 		contain.setLayout(null);
-		id = new JLabel("ÕÊºÅ");
-		name = new JLabel("ĞÕÃû");
+		id = new JLabel("å¸å·");
+		name = new JLabel("å§“å");
 		group = new CheckboxGroup();
 		check1 = new Checkbox("male", group, true);
 		check2 = new Checkbox("female", group, false);
-		birthday = new JLabel("ÉúÈÕ");
-		institute = new JLabel("Ñ§Ôº");
-		major = new JLabel("×¨Òµ");		
+		birthday = new JLabel("ç”Ÿæ—¥");
+		institute = new JLabel("å­¦é™¢");
+		major = new JLabel("ä¸“ä¸š");		
 		
-		submit = new JButton("Ìá½»");
+		submit = new JButton("æäº¤");
 		chooice = new Choice();
 		chooice.addItem("student");
 		chooice.addItem("teacher");
@@ -99,12 +99,12 @@ public class AddUser extends JFrame implements ActionListener {
 		if (e.getSource() == submit) {
 			if ((idt.getText().equals("")) || (namet.getText().equals("")) || (birthdayt.getText().equals(""))
 					|| (institutet.getText().equals("")) || (majort.getText().equals(""))) {
-				JOptionPane.showMessageDialog(null, "ĞÅÏ¢²»ÄÜÎª¿Õ£¡", "ÌáÊ¾", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "ä¿¡æ¯ä¸èƒ½ä¸ºç©ºï¼", "æç¤º", JOptionPane.INFORMATION_MESSAGE);
 			} else {
 				String ch = (String) chooice.getSelectedItem();
 				if (ch == "student") {
 					if ((new CheckInfo().isMember("student", idt.getText(), namet.getText())) == 2) {
-						JOptionPane.showMessageDialog(null, "´ËÑ§ÉúÒÑ¾­´æÔÚ£¡", "ÌáÊ¾", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "æ­¤å­¦ç”Ÿå·²ç»å­˜åœ¨ï¼", "æç¤º", JOptionPane.INFORMATION_MESSAGE);
 					} else {
 						file = file + "student.txt";
 						
@@ -113,7 +113,7 @@ public class AddUser extends JFrame implements ActionListener {
 						try {
 							BufferedReader br = new BufferedReader(new FileReader(file));
 							String s = null;
-							while ((s = br.readLine()) != null) {  // ÏÈ½«Ô­À´´æÔÚµÄĞÅÏ¢´æ´¢ÆğÀ´
+							while ((s = br.readLine()) != null) {  // å…ˆå°†åŸæ¥å­˜åœ¨çš„ä¿¡æ¯å­˜å‚¨èµ·æ¥
 								String[] result = s.split(" ");
 	
 								String s1 = "";
@@ -161,11 +161,11 @@ public class AddUser extends JFrame implements ActionListener {
 						}
 
 		
-						JOptionPane.showMessageDialog(null, "³É¹¦Ìí¼ÓÒ»¸öÑ§Éú£¡", "ÌáÊ¾", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "æˆåŠŸæ·»åŠ ä¸€ä¸ªå­¦ç”Ÿï¼", "æç¤º", JOptionPane.INFORMATION_MESSAGE);
 					}
 				} else if (ch == "teacher") {
 					if ((new CheckInfo().isMember("teacher", idt.getText(), namet.getText())) == 2) {
-						JOptionPane.showMessageDialog(null, "´Ë½ÌÊ¦ÒÑ¾­´æÔÚ£¡", "ÌáÊ¾", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "æ­¤æ•™å¸ˆå·²ç»å­˜åœ¨ï¼", "æç¤º", JOptionPane.INFORMATION_MESSAGE);
 					} else {
 						
 						file = file + "teacher.txt";
@@ -175,7 +175,7 @@ public class AddUser extends JFrame implements ActionListener {
 						try {
 							BufferedReader br = new BufferedReader(new FileReader(file));
 							String s = null;
-							while ((s = br.readLine()) != null) {  // ÏÈ½«Ô­À´´æÔÚµÄĞÅÏ¢´æ´¢ÆğÀ´
+							while ((s = br.readLine()) != null) {  // å…ˆå°†åŸæ¥å­˜åœ¨çš„ä¿¡æ¯å­˜å‚¨èµ·æ¥
 								String[] result = s.split(" ");
 	
 								String s1 = "";
@@ -223,11 +223,11 @@ public class AddUser extends JFrame implements ActionListener {
 						}
 						
 						
-						JOptionPane.showMessageDialog(null, "³É¹¦Ìí¼ÓÒ»¸öÀÏÊ¦£¡", "ÌáÊ¾", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "æˆåŠŸæ·»åŠ ä¸€ä¸ªè€å¸ˆï¼", "æç¤º", JOptionPane.INFORMATION_MESSAGE);
 					}
 				} else {
 					if ((new CheckInfo().isMember("administrator", idt.getText(), namet.getText())) == 2) {
-						JOptionPane.showMessageDialog(null, "´Ë½ÌÎñÔ±ÒÑ¾­´æÔÚ£¡", "ÌáÊ¾", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "æ­¤æ•™åŠ¡å‘˜å·²ç»å­˜åœ¨ï¼", "æç¤º", JOptionPane.INFORMATION_MESSAGE);
 					} else {
 
 						file = file.concat("administrator.txt");
@@ -237,7 +237,7 @@ public class AddUser extends JFrame implements ActionListener {
 						try {
 							BufferedReader br = new BufferedReader(new FileReader(file));
 							String s = null;
-							while ((s = br.readLine()) != null) { // ÏÈ½«Ô­À´´æÔÚµÄĞÅÏ¢´æ´¢ÆğÀ´
+							while ((s = br.readLine()) != null) { // å…ˆå°†åŸæ¥å­˜åœ¨çš„ä¿¡æ¯å­˜å‚¨èµ·æ¥
 								String[] result = s.split(" ");
 
 								String s1 = "";
@@ -285,7 +285,7 @@ public class AddUser extends JFrame implements ActionListener {
 							e1.printStackTrace();
 						}
 
-						JOptionPane.showMessageDialog(null, "³É¹¦Ìí¼ÓÒ»¸ö½ÌÎñÔ±£¡", "ÌáÊ¾",
+						JOptionPane.showMessageDialog(null, "æˆåŠŸæ·»åŠ ä¸€ä¸ªæ•™åŠ¡å‘˜ï¼", "æç¤º",
 								JOptionPane.INFORMATION_MESSAGE);
 					}
 				}

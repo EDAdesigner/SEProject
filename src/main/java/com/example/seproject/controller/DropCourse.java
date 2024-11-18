@@ -17,15 +17,15 @@ public class DropCourse extends JFrame implements ActionListener {
     String studentId;
 
     public DropCourse(String studentId) {
-        super("�˿�");
+        super("退课");
         this.studentId = studentId;
         setSize(300, 200);
         setLocation(600, 400);
         contain = new JPanel();
         contain.setLayout(null);
-        courseIdLabel = new JLabel("�γ̺�");
+        courseIdLabel = new JLabel("课程号");
         courseIdField = new JTextField();
-        submit = new JButton("�ύ");
+        submit = new JButton("提交");
 
         courseIdLabel.setBounds(42, 45, 75, 35);
         courseIdField.setBounds(80, 45, 150, 35);
@@ -44,7 +44,7 @@ public class DropCourse extends JFrame implements ActionListener {
         if (e.getSource() == submit) {
             String courseId = courseIdField.getText();
             if (courseId.equals("")) {
-                JOptionPane.showMessageDialog(null, "�γ̺Ų���Ϊ�գ�", "��ʾ", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "课程号不能为空！", "提示", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 String file = System.getProperty("user.dir") + "/data/course_student" + courseId + "_student.txt";
                 ArrayList<String> students = new ArrayList<>();
@@ -64,7 +64,7 @@ public class DropCourse extends JFrame implements ActionListener {
                         bw.newLine();
                     }
                     bw.close();
-                    JOptionPane.showMessageDialog(null, "�˿γɹ���", "��ʾ", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "退课成功！", "提示", JOptionPane.INFORMATION_MESSAGE);
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
