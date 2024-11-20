@@ -9,6 +9,13 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.seproject.Service.CourseService;
+import com.example.seproject.Service.GradeService;
+import com.example.seproject.mapper.UserMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
+
 @SuppressWarnings("serial")
 public class GradeEnter extends JFrame implements ActionListener {
 	/*
@@ -23,6 +30,7 @@ public class GradeEnter extends JFrame implements ActionListener {
 	
 	JButton submit, bn;
 	ArrayList<String> modifiedContent = new ArrayList<String>();
+
 
 	public GradeEnter(String idd) {
 		super("查看");
@@ -50,150 +58,35 @@ public class GradeEnter extends JFrame implements ActionListener {
 		if (e.getSource() == submit) {
 			if (hasThisCourse(idt.getText()) == 1) {
 				enter();   // 进入成绩输入界面
-				
+
 			} else {
 				JOptionPane.showMessageDialog(null, "您未开设此课程！", "提示", JOptionPane.INFORMATION_MESSAGE);
 			}
 		} else if (e.getSource() == bn) {
-			
 			if (hasThisStu() == 1) {   // 登陆成绩
-				
-				String path = System.getProperty("user.dir")+"/data/grade";
-				// String path = "D://test//grade";
-
-				
-				// 找对应课程成绩文件
-				List<String> files = new ArrayList<String>(); // 课程成绩目录下所有科目成绩文件
-				File file = new File(path);
-				File[] tempList = file.listFiles();
-
-				for (int i = 0; i < tempList.length; i++) {
-					if (tempList[i].isFile()) {
-						files.add(tempList[i].toString());
-						// 文件名，不包含路径
-						// String fileName = tempList[i].getName();
-					}
-					if (tempList[i].isDirectory()) {
-						// 这里就不递归了，
-					}
-				}
-
 				try {
-					for (int i = 0; i < files.size(); i++) {  // 遍历所有文件
-						BufferedReader br = new BufferedReader(new FileReader(files.get(i)));
-						String s = null;
-						String[] result = null;
-						while ((s = br.readLine()) != null) {// 使用readLine方法，对一个文件一次读一行
-							result = s.split(" ");
-							if (result[0].equals(idt.getText())){  // 开始改写成绩文件
-								targetFile = files.get(i);
-								
-								// 将原来的内容先复制
-								String s1 = "";
-								for (int j = 0; j < result.length - 1; j++) {
-									s1 = s1 + result[j];
-									s1 = s1 + " ";
-								}
-								s1 = s1 + result[result.length - 1];
-								
-								modifiedContent.add(s1);
-							
-							}
-						} // 读完一个成绩文件
-						
-						if (result[0].equals(idt.getText())){
-							String gradeInfo = idt.getText();
-							gradeInfo = gradeInfo + " ";
-							gradeInfo = gradeInfo + result[1];
-							gradeInfo = gradeInfo + " ";
-							gradeInfo = gradeInfo + result[2];
-							gradeInfo = gradeInfo + " ";
-							gradeInfo = gradeInfo + result[3];
-							gradeInfo = gradeInfo + " ";
-							gradeInfo = gradeInfo + stuIdt.getText();
-							gradeInfo = gradeInfo + " ";
-							gradeInfo = gradeInfo + stuNamet.getText();
-							gradeInfo = gradeInfo + " ";
-							gradeInfo = gradeInfo + stuGradet.getText();
-							modifiedContent.add(gradeInfo);
-						}
-						
-						br.close();
-					}
-				} catch (Exception ee) {
-					ee.printStackTrace();
-				}
-				
-				
-				
-				
-				try {
-					FileWriter fw = new FileWriter(targetFile);
-					BufferedWriter bw = new BufferedWriter(fw);
+					GradeService gradeService = new GradeService();
+					boolean success = gradeService.updateGrade(idt.getText(), stuIdt.getText(), stuNamet.getText(), stuGradet.getText());
 
-					for (int i = 0; i < modifiedContent.size(); i++) {
-						bw.write(modifiedContent.get(i));
-						bw.newLine();
+					if (success) {
+						JOptionPane.showMessageDialog(null, "成绩登录成功！", "提示", JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog(null, "成绩登录失败！", "提示", JOptionPane.INFORMATION_MESSAGE);
 					}
-
-					bw.close();
-					fw.close();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					JOptionPane.showMessageDialog(null, "成绩登录过程中发生错误！", "提示", JOptionPane.ERROR_MESSAGE);
 				}
-				
-				
-				JOptionPane.showMessageDialog(null, "成绩登录成功！", "提示", JOptionPane.INFORMATION_MESSAGE);
-			
 			} else {
-				JOptionPane.showMessageDialog(null, "课程号为" + idt.getText() + "无此学生", "提示",
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "课程号为" + idt.getText() + "无此学生", "提示", JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
 	}
 
+	//判断是否有学生
 	int hasThisStu() {
-		
-		@SuppressWarnings("unused")
-		String stuId = stuIdt.getText();
-		
-		String path = System.getProperty("user.dir")+"/data/course_student";
-		// String path = "D://test//course_student";
-
-		List<String> files = new ArrayList<String>(); // 目录下所有文件
-		File file = new File(path);
-		File[] tempList = file.listFiles();
-
-		for (int i = 0; i < tempList.length; i++) {
-			if (tempList[i].isFile()) {
-				files.add(tempList[i].toString());
-				// 文件名，不包含路径
-				// String fileName = tempList[i].getName();
-			}
-			if (tempList[i].isDirectory()) {
-				// 这里就不递归了，
-			}
-		}
-
-		try {
-			for (int i = 0; i < files.size(); i++) {
-				BufferedReader br = new BufferedReader(new FileReader(
-						files.get(i)));
-				String s = null;
-				while ((s = br.readLine()) != null) {// 使用readLine方法，一次读一行
-					String[] result = s.split(" ");
-					if (result[0].equals(idt.getText()) && result[2].equals(stuIdt.getText())){
-						return 1;
-					}
-				}
-				br.close();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return 0;
+		GradeService gradeService = new GradeService();
+		return gradeService.hasThisStu(stuIdt);
 	}
 
 	void enter() {
@@ -236,24 +129,11 @@ public class GradeEnter extends JFrame implements ActionListener {
 		
 	}
 
-	int hasThisCourse(String idd) {
-		
-		String file = System.getProperty("user.dir")+"/data/course.txt";
-		// String file = "D://test//course.txt";
-		try{
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String s = null;
-            while((s = br.readLine())!=null){//使用readLine方法，一次读一行
-            	String[] result = s.split(" ");
-            	if(result[0].equals(idd)){
-            		return 1;
-            	}
-            }
-            br.close();    
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-		return 0;
+
+	int hasThisCourse(String courseId) {
+		CourseService courseService = new CourseService();
+
+		return courseService.hasThisCourse(courseId) ? 1 : 0;
 	}
 
 	public void processWindowEvent(WindowEvent e) {

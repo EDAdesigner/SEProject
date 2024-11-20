@@ -1,5 +1,8 @@
 package com.example.seproject.controller;
 
+import com.example.seproject.Service.CourseService;
+import com.example.seproject.Service.EnrollmentService;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -14,6 +17,9 @@ public class SelectCourse extends JFrame implements ActionListener {
     JLabel courseIdLabel;
     JTextField courseIdField;
     String studentId;
+
+    CourseService courseService = new CourseService();
+    EnrollmentService enrollmentService = new EnrollmentService();
 
     public SelectCourse(String studentId) {
         super("选课");
@@ -40,39 +46,26 @@ public class SelectCourse extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
+
         if (e.getSource() == submit) {
             String courseId = courseIdField.getText();
             if (courseId.equals("")) {
                 JOptionPane.showMessageDialog(null, "课程号不能为空！", "提示", JOptionPane.INFORMATION_MESSAGE);
-            } else if (!courseExists(courseId)) {
+            } else if (!courseService.courseExists(courseId)) {
                 JOptionPane.showMessageDialog(null, "课程号不存在！", "提示", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                String file = System.getProperty("user.dir") + "/data/course_student" + courseId + "_student.txt";
-                try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))) {
-                    bw.write(studentId);
-                    bw.newLine();
+                boolean success = enrollmentService.enrollStudent(studentId, courseId);
+                if (success) {
                     JOptionPane.showMessageDialog(null, "选课成功！", "提示", JOptionPane.INFORMATION_MESSAGE);
-                } catch (IOException e1) {
-                    e1.printStackTrace();
+                } else {
+                    JOptionPane.showMessageDialog(null, "选课失败！", "提示", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         }
     }
 
     private boolean courseExists(String courseId) {
-        String file = System.getProperty("user.dir") + "/data/course.txt";
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split(" ");
-                if (parts[0].equals(courseId)) {
-                    return true;
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
+        return courseService.courseExists(courseId);
     }
 
     public void processWindowEvent(WindowEvent e) {

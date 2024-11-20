@@ -1,36 +1,31 @@
 package com.example.seproject.controller;
 
+import com.example.seproject.entity.User;
+import com.example.seproject.mapper.UserMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 
+@Component
 public class CheckInfo {
 	/*
 	 * 登陆时检查用户信息
 	 */
 
-	public int isMember(String table, String id, String passwd) {
-		
-		// String file = "D://test//".concat(table.concat(".txt"));
-		String file = System.getProperty("user.dir")+"/data".concat("/").concat(table).concat(".txt");
-		 //StringBuilder result = new StringBuilder();
-	        try{
-	            BufferedReader br = new BufferedReader(new FileReader(file));//构造一个BufferedReader类来读取文件
-	            String s = null;
-	            while((s = br.readLine())!=null){//使用readLine方法，一次读一行
-	            	String[] result = s.split(" ");
-	            	if(result[0].equals(id) && result[1].equals(passwd)){
-	            		return 1;
-	            	}
-	            	if(result[0].equals(id)){
-	            		return 2;
-	            	}
-	            	
-	            }
-	            br.close();    
-	        }catch(Exception e){
-	            e.printStackTrace();
-	        }
+	@Autowired
+	private UserMapper userMapper;
 
+	public int isMember(String table, String id, String passwd) {
+		User user = userMapper.findUserByIdAndType(id, table);
+		if (user != null) {
+			if (user.getPwd().equals(passwd)) {
+				return 1;
+			} else {
+				return 2;
+			}
+		}
 		return 0;
 	}
 }

@@ -1,12 +1,12 @@
 package com.example.seproject.controller;
 
+import com.example.seproject.Service.CourseService;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
-import java.io.*;
-import java.util.ArrayList;
 
 @SuppressWarnings("serial")
 public class DropCourse extends JFrame implements ActionListener {
@@ -43,30 +43,21 @@ public class DropCourse extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == submit) {
             String courseId = courseIdField.getText();
-            if (courseId.equals("")) {
+            if (courseId.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "课程号不能为空！", "提示", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                String file = System.getProperty("user.dir") + "/data/course_student" + courseId + "_student.txt";
-                ArrayList<String> students = new ArrayList<>();
                 try {
-                    BufferedReader br = new BufferedReader(new FileReader(file));
-                    String s;
-                    while ((s = br.readLine()) != null) {
-                        if (!s.equals(studentId)) {
-                            students.add(s);
-                        }
+                    // Assuming you have a CourseService class to handle database operations
+                    CourseService courseService = new CourseService();
+                    boolean success = courseService.dropCourse(studentId, courseId);
+                    if (success) {
+                        JOptionPane.showMessageDialog(null, "退课成功！", "提示", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "退课失败！", "提示", JOptionPane.INFORMATION_MESSAGE);
                     }
-                    br.close();
-
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-                    for (String student : students) {
-                        bw.write(student);
-                        bw.newLine();
-                    }
-                    bw.close();
-                    JOptionPane.showMessageDialog(null, "退课成功！", "提示", JOptionPane.INFORMATION_MESSAGE);
-                } catch (IOException e1) {
-                    e1.printStackTrace();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "退课过程中发生错误！", "提示", JOptionPane.ERROR_MESSAGE);
                 }
             }
         }

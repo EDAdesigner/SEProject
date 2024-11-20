@@ -7,10 +7,7 @@ public class GradeSort {
 	/*
 	 * 教师查询学生成绩统计结果功能
 	 */
-	
-	
-	String courseId;
-	float  pass, good, excellent;  // 及格，优良，优秀
+
 	Course course;
 	
 	public GradeSort(String courseId, float pass, float good, float excellent) {

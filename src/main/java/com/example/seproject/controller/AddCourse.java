@@ -2,22 +2,28 @@ package com.example.seproject.controller;
 
 
 import com.example.seproject.entity.Course;
+import com.example.seproject.mapper.CourseMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
-import java.io.*;
-import java.util.ArrayList;
 
 
 @SuppressWarnings("serial")
+@Service
+@Lazy
 public class AddCourse extends JFrame implements ActionListener {
 	/*
 	 * 教师增加课程
 	 */
-	
+
+	@Autowired
+	private CourseMapper courseMapper;
 	
 	JPanel contain;
 	JButton submit;
@@ -80,27 +86,6 @@ public class AddCourse extends JFrame implements ActionListener {
 		setVisible(true);
 		enableEvents(AWTEvent.WINDOW_EVENT_MASK);
 	}
-	
-	public int hasCourse(String id){  //  教师开课前检查课程是否已经存在
-		
-		String file = System.getProperty("user.dir")+"/data/course.txt";
-		try{
-            BufferedReader br = new BufferedReader(new FileReader(file)); //构造一个BufferedReader类来读取文件
-            String s = null;
-            while((s = br.readLine())!=null){//使用readLine方法，一次读一行
-            	String[] result = s.split(" ");
-            	if(result[0].equals(id)){
-            		return 1;
-            		
-            	}
-            }
-            br.close();    
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-		
-		return 0; 
-	}
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == submit) {
@@ -108,62 +93,18 @@ public class AddCourse extends JFrame implements ActionListener {
 					|| (classHt.getText().equals("")) || teacherIdt.getText().equals("") || teacherNamet.getText().equals("")) {
 				JOptionPane.showMessageDialog(null, "信息不能为空！", "提示", JOptionPane.INFORMATION_MESSAGE);
 			} else {
-				if ((hasCourse(idt.getText())) == 1) {
-					JOptionPane.showMessageDialog(null, "此课程已经存在！", "提示", JOptionPane.INFORMATION_MESSAGE);
-				} else {
-					
-					String file = System.getProperty("user.dir")+"/data/course.txt";
-					
-					ArrayList<String> modifiedContent = new ArrayList<String>();
-					// StringBuilder result = new StringBuilder();
-					try {
-						BufferedReader br = new BufferedReader(new FileReader(file));
-						String s = null;
-						while ((s = br.readLine()) != null) {  // 先将原来存在的信息存储起来
-							String[] result = s.split(" ");
-
-							String s1 = "";
-							for (int i = 0; i < result.length - 1; i++) {
-								s1 = s1 + result[i];
-								s1 = s1 + " ";
-							}
-							s1 = s1 + result[result.length - 1];
-							// System.out.println(s1);
-							modifiedContent.add(s1);
-						}
-						br.close();
-
-					} catch (Exception e1) {
-						e1.printStackTrace();
+				try {
+					Course existingCourse = courseMapper.findCourseById(idt.getText());
+					if (existingCourse != null) {
+						JOptionPane.showMessageDialog(null, "此课程已经存在！", "提示", JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						Course course = new Course(idt.getText(), namet.getText(), greditt.getText(), classHt.getText(), Integer.parseInt(teacherIdt.getText()), Integer.parseInt(teacherNamet.getText()));;
+						courseMapper.insertCourse(course);
+						JOptionPane.showMessageDialog(null, "添加成功", "提示", JOptionPane.INFORMATION_MESSAGE);
 					}
-					
-					Course course = new Course(idt.getText(), namet.getText(), greditt.getText(), classHt.getText(), teacherIdt.getText(), teacherNamet.getText());
-					
-					
-					modifiedContent.add(course.getCourseId()+" "+course.getCourseName()+" "+course.getCredit()+" "+course.getHour()+" "
-							+course.getTeacherId()+" "+course.getTeacherName());
-
-					try {
-						FileWriter fw = new FileWriter(file);
-						BufferedWriter bw = new BufferedWriter(fw);
-
-						for (int i = 0; i < modifiedContent.size(); i++) {
-							bw.write(modifiedContent.get(i));
-							bw.newLine();
-						}
-
-						bw.close();
-						fw.close();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-
-					//  除了添加对应课程文件外，还需要添加课程成绩文件以及课程学生文件
-					File gradeFile = new File(System.getProperty("user.dir")+"/data/grade"+course.getCourseName()+".txt");
-					File studentFile = new File(System.getProperty("user.dir")+"/data/course_student"+course.getCourseName()+"_student.txt");
-					
-					JOptionPane.showMessageDialog(null, "添加成功", "提示", JOptionPane.INFORMATION_MESSAGE);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					JOptionPane.showMessageDialog(null, "添加失败", "错误", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		}

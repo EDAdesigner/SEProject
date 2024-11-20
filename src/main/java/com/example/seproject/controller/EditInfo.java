@@ -1,12 +1,12 @@
 package com.example.seproject.controller;
 
+import com.example.seproject.Service.UserService;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
-import java.io.*;
-import java.util.ArrayList;
 
 @SuppressWarnings("serial")
 public class EditInfo extends JFrame implements ActionListener {
@@ -84,7 +84,7 @@ public class EditInfo extends JFrame implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == submit) {
-			if ((inst.getText().equals("")) || (birtht.getText().equals(""))
+			if ((instt.getText().equals("")) || (birtht.getText().equals(""))
 					|| (namet.getText().equals(""))
 					|| (pass1t.getText().equals(""))
 					|| (pass2t.getText().equals(""))) {
@@ -98,195 +98,30 @@ public class EditInfo extends JFrame implements ActionListener {
 					JOptionPane.showMessageDialog(null, "密码长度至少为6位！", "提示",
 							JOptionPane.INFORMATION_MESSAGE);
 				} else {
-					String m;
-					if (check1.getState()) {
-						m = "male";
-					} else {
-						m = "female";
+					String gender = check1.getState() ? "male" : "female";
+					try {
+						// Assuming you have a UserService class to handle database operations
+						UserService userService = new UserService();
+						boolean success = false;
+						if (flag == 0) { // 学生修改信息
+							success = userService.updateStudentInfo(id, pass2t.getText(), namet.getText(), gender, birtht.getText(), instt.getText(), majort.getText());
+						} else if (flag == 1) { // 教师修改信息
+							success = userService.updateTeacherInfo(id, pass2t.getText(), namet.getText(), gender, birtht.getText(), instt.getText(), majort.getText());
+						} else if (flag == 3) { // 教务员修改信息
+							success = userService.updateAdministratorInfo(id, pass2t.getText(), namet.getText(), gender, birtht.getText(), instt.getText(), majort.getText());
+						}
+						if (success) {
+							JOptionPane.showMessageDialog(null, "修改成功！", "提示",
+									JOptionPane.INFORMATION_MESSAGE);
+						} else {
+							JOptionPane.showMessageDialog(null, "修改失败！", "提示",
+									JOptionPane.INFORMATION_MESSAGE);
+						}
+					} catch (Exception ex) {
+						ex.printStackTrace();
+						JOptionPane.showMessageDialog(null, "修改过程中发生错误！", "提示",
+								JOptionPane.ERROR_MESSAGE);
 					}
-
-					if (flag == 0) { // 学生修改信息
-
-						ArrayList<String> modifiedContent = new ArrayList<String>();
-						String file = System.getProperty("user.dir")
-								+ "/data/student.txt";
-						// String file = "D://test//student.txt";
-						// StringBuilder result = new StringBuilder();
-						try {
-							BufferedReader br = new BufferedReader(
-									new FileReader(file));
-
-							String s = null;
-							while ((s = br.readLine()) != null) {
-								String[] result = s.split(" ");
-								if (result[0].equals(id)) {
-									result[0] = result[0]; // 号码不能更改
-									result[1] = result[1].replace(result[1],
-											pass2t.getText());
-									result[2] = result[2].replace(result[2],
-											namet.getText());
-									result[3] = result[3].replace(result[3], m);
-									result[4] = result[4].replace(result[4],
-											birtht.getText());
-									result[5] = result[5].replace(result[5],
-											instt.getText());
-									result[6] = result[6].replace(result[6],
-											majort.getText());
-
-								}
-								String s1 = "";
-								for (int i = 0; i < result.length - 1; i++) {
-									s1 = s1 + result[i];
-									s1 = s1 + " ";
-								}
-								s1 = s1 + result[result.length - 1];
-								// System.out.println(s1);
-								modifiedContent.add(s1);
-							}
-							br.close();
-
-						} catch (Exception e1) {
-							e1.printStackTrace();
-						}
-
-						try {
-							FileWriter fw = new FileWriter(file);
-							BufferedWriter bw = new BufferedWriter(fw);
-
-							for (int i = 0; i < modifiedContent.size(); i++) {
-								bw.write(modifiedContent.get(i));
-								bw.newLine();
-							}
-
-							bw.close();
-							fw.close();
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-
-					} else if (flag == 1) { // 教师修改信息
-
-						ArrayList<String> modifiedContent = new ArrayList<String>();
-						String file = System.getProperty("user.dir")
-								+ "/data/teacher.txt";
-						// String file = "D://test//teacher.txt";
-						// StringBuilder result = new StringBuilder();
-						try {
-							BufferedReader br = new BufferedReader(
-									new FileReader(file));
-
-							String s = null;
-							while ((s = br.readLine()) != null) {
-								String[] result = s.split(" ");
-								if (result[0].equals(id)) {
-									result[0] = result[0]; // 号码不能更改
-									result[1] = result[1].replace(result[1],
-											pass2t.getText());
-									result[2] = result[2].replace(result[2],
-											namet.getText());
-									result[3] = result[3].replace(result[3], m);
-									result[4] = result[4].replace(result[4],
-											birtht.getText());
-									result[5] = result[5].replace(result[5],
-											instt.getText());
-									result[6] = result[6].replace(result[6],
-											majort.getText());
-								}
-								String s1 = "";
-								for (int i = 0; i < result.length - 1; i++) {
-									s1 = s1 + result[i];
-									s1 = s1 + " ";
-								}
-								s1 = s1 + result[result.length - 1];
-								// System.out.println(s1);
-								modifiedContent.add(s1);
-							}
-							br.close();
-
-						} catch (Exception e1) {
-							e1.printStackTrace();
-						}
-
-						try {
-							FileWriter fw = new FileWriter(file);
-							BufferedWriter bw = new BufferedWriter(fw);
-
-							for (int i = 0; i < modifiedContent.size(); i++) {
-								bw.write(modifiedContent.get(i));
-								bw.newLine();
-							}
-
-							bw.close();
-							fw.close();
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-
-					} else if (flag == 3) { // 教务员修改信息
-
-						ArrayList<String> modifiedContent = new ArrayList<String>();
-						String file = System.getProperty("user.dir")
-								+ "/data/administrator.txt";
-						// String file = "D://test//administrator.txt";
-						// StringBuilder result = new StringBuilder();
-						try {
-							BufferedReader br = new BufferedReader(
-									new FileReader(file));
-
-							String s = null;
-							while ((s = br.readLine()) != null) {
-								String[] result = s.split(" ");
-								if (result[0].equals(id)) {
-									result[0] = result[0]; // 号码不能更改
-									result[1] = result[1].replace(result[1],
-											pass2t.getText());
-									result[2] = result[2].replace(result[2],
-											namet.getText());
-									result[3] = result[3].replace(result[3], m);
-									result[4] = result[4].replace(result[4],
-											birtht.getText());
-									result[5] = result[5].replace(result[5],
-											instt.getText());
-									result[6] = result[6].replace(result[6],
-											majort.getText());
-								}
-								String s1 = "";
-								for (int i = 0; i < result.length - 1; i++) {
-									s1 = s1 + result[i];
-									s1 = s1 + " ";
-								}
-								s1 = s1 + result[result.length - 1];
-								// System.out.println(s1);
-								modifiedContent.add(s1);
-							}
-							br.close();
-
-						} catch (Exception e1) {
-							e1.printStackTrace();
-						}
-
-						try {
-							FileWriter fw = new FileWriter(file);
-							BufferedWriter bw = new BufferedWriter(fw);
-
-							for (int i = 0; i < modifiedContent.size(); i++) {
-								bw.write(modifiedContent.get(i));
-								bw.newLine();
-							}
-
-							bw.close();
-							fw.close();
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-
-					}
-
-					JOptionPane.showMessageDialog(null, "修改成功！", "提示",
-							JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		}

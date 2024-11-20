@@ -1,19 +1,24 @@
 package com.example.seproject.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 public class Course {
 	
 	private String courseId;
 	private String courseName;
 	private String teacherId;
 	private String teacherName;
-	private String credit;
-	private String hour;
+	private Integer credit;
+	private Integer hour;
 	private float fail, pass, good, excellent;
 	
 	public Course(String courseId, float pass, float good, float excellent) {
@@ -25,7 +30,7 @@ public class Course {
 	}
 
 	public Course(String courseId, String courseName, String teacherId,
-			String teacherName, String credit, String hour) {
+			String teacherName, Integer credit, Integer hour) {
 
 		this.courseId = courseId;
 		this.courseName = courseName;
@@ -48,96 +53,6 @@ public class Course {
 		this.good = good;
 		this.excellent = excellent;
 	}
-
-	public String getCourseId() {
-		return courseId;
-	}
-
-	public void setCourseId(String courseId) {
-		this.courseId = courseId;
-	}
-
-	public String getCourseName() {
-		return courseName;
-	}
-
-	public void setCourseName(String courseName) {
-		this.courseName = courseName;
-	}
-
-	public String getTeacherId() {
-		return teacherId;
-	}
-
-	public void setTeacherId(String teacherId) {
-		this.teacherId = teacherId;
-	}
-
-	public String getTeacherName() {
-		return teacherName;
-	}
-
-	public void setTeacherName(String teacherName) {
-		this.teacherName = teacherName;
-	}
-
-	public float getFial() {
-		return fail;
-	}
-
-	public void setFial(float fial) {
-		this.fail = fial;
-	}
-
-	public float getPass() {
-		return pass;
-	}
-
-	public void setPass(float pass) {
-		this.pass = pass;
-	}
-
-	public float getGood() {
-		return good;
-	}
-
-	public void setGood(float good) {
-		this.good = good;
-	}
-
-	public float getExcellent() {
-		return excellent;
-	}
-
-	public void setExcellent(float excellent) {
-		this.excellent = excellent;
-	}
-
-	public String getCredit() {
-		return credit;
-	}
-
-	public void setCredit(String credit) {
-		this.credit = credit;
-	}
-
-	public String getHour() {
-		return hour;
-	}
-
-	public void setHour(String hour) {
-		this.hour = hour;
-	}
-
-	public float getFail() {
-		return fail;
-	}
-
-	public void setFail(float fail) {
-		this.fail = fail;
-	}
-	
-	
 	
 	public int hasCourse(){
 		String file = System.getProperty("user.dir")+"/data/course.txt";

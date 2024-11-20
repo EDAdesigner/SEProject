@@ -1,5 +1,8 @@
 package com.example.seproject.controller;
 
+import com.example.seproject.Service.GradeService;
+import com.example.seproject.entity.Grade;
+
 import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,13 +19,7 @@ public class GradeInfo extends JFrame {
 	JTextArea list;
 	String id;
 
-	String courseid;
-	String coursename;
-	String teacherid;
-	String teachername;
-	String studentid;
-	String studentname;
-	String grade;
+	GradeService gradeService = new GradeService();
 	
 
 	public GradeInfo(String id) {
@@ -43,50 +40,16 @@ public class GradeInfo extends JFrame {
 		list.append("学生姓名" + "\t");
 		list.append("成绩" + "\n");
 
-		// String path = "D://test//grade";
-		String path = System.getProperty("user.dir")+"/data/grade";
-
-		List<String> files = new ArrayList<String>(); // 目录下所有文件
-		File file = new File(path);
-		File[] tempList = file.listFiles();
-
-		for (int i = 0; i < tempList.length; i++) {
-			if (tempList[i].isFile()) {
-				files.add(tempList[i].toString());
-				// 文件名，不包含路径
-				// String fileName = tempList[i].getName();
-			}
-			if (tempList[i].isDirectory()) {
-				// 这里就不递归了，
-			}
-		}
-
 		try {
-			for (int i = 0; i < files.size(); i++) {
-				BufferedReader br = new BufferedReader(new FileReader(
-						files.get(i)));
-				String s = null;
-				while ((s = br.readLine()) != null) {// 使用readLine方法，一次读一行
-					String[] result = s.split(" ");
-					if (result[4].equals(id)) { // 学生学号相等时
-						courseid = result[0];
-						coursename = result[1];
-						teacherid = result[2];
-						teachername = result[3];
-						studentid = result[4];
-						studentname = result[5];
-						grade = result[6];
-
-						list.append(courseid + "\t");
-						list.append(coursename + "\t");
-						list.append(teacherid + "\t");
-						list.append(teachername + "\t");
-						list.append(studentid + "\t");
-						list.append(studentname + "\t");
-						list.append(grade + "\n");
-					}
-				}
-				br.close();
+			List<Grade> grades = gradeService.getGradesByStudentId(id);
+			for (Grade grade : grades) {
+				list.append(grade.getCourseId() + "\t");
+				list.append(grade.getCourseName() + "\t");
+				list.append(grade.getTeacherId() + "\t");
+				list.append(grade.getTeacherName() + "\t");
+				list.append(grade.getStudentId() + "\t");
+				list.append(grade.getStudentName() + "\t");
+				list.append(grade.getGrade() + "\n");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -94,6 +57,5 @@ public class GradeInfo extends JFrame {
 
 		add(contain);
 		setVisible(true);
-
 	}
 }
