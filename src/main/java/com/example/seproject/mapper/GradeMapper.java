@@ -16,8 +16,11 @@ public interface GradeMapper {
     @Select("SELECT g.course_id, c.course_name, c.teacher_id, t.name as teacher_name, g.student_id, s.name as student_name, g.grade " +
             "FROM grade g " +
             "JOIN courses c ON g.course_id = c.course_id " +
-            "JOIN user t ON c.teacher_id = t.user_id " +
-            "JOIN user s ON g.student_id = s.user_id " +
+            "JOIN user t ON c.teacher_id = t.id " +
+            "JOIN user s ON g.student_id = s.id " +
             "WHERE g.student_id = #{studentId}")
     List<Grade> findGradesByStudentId(String studentId);
+
+    @Select("SELECT * FROM grade WHERE course_id = #{courseId}")
+    List<Grade> findGradesByCourseId(String courseId);
 }

@@ -75,11 +75,11 @@ public class StudentsPanel extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == infoButton) {
 			Info info = applicationContext.getBean(Info.class);
-			info.init(id, 1);
+			info.init(id, 0);
 		}
 		if (e.getSource() == gradeButton) {
-			GradeEnter gradeEnter = applicationContext.getBean(GradeEnter.class);
-			gradeEnter.init(id);
+			GradeInfo gradeInfo = applicationContext.getBean(GradeInfo.class);
+			gradeInfo.init(id);
 		}
 		if (e.getSource() == courseButton) {
 			CourseView courseView = applicationContext.getBean(CourseView.class);

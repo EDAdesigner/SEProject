@@ -38,6 +38,10 @@ public class GradeService {
         }
     }
 
+    public List<Grade> getGradesByCourseId(String courseId) {
+        return gradeMapper.findGradesByCourseId(courseId);
+    }
+
     public List<Grade> getGradesByStudentId(String studentId) {
         return gradeMapper.findGradesByStudentId(studentId);
     }

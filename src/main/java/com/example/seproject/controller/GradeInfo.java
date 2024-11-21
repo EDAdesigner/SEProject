@@ -2,6 +2,9 @@ package com.example.seproject.controller;
 
 import com.example.seproject.Service.GradeService;
 import com.example.seproject.entity.Grade;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +17,8 @@ import java.util.List;
 
 @Service
 @Lazy
+@AllArgsConstructor
+@NoArgsConstructor
 public class GradeInfo extends JFrame { 
 	/**
 	 * 学生根据学号查询所有成绩
@@ -23,19 +28,20 @@ public class GradeInfo extends JFrame {
 	JTextArea list;
 	String id;
 
-	GradeService gradeService = new GradeService();
-	
+	@Autowired
+	GradeService gradeService;
 
-	public GradeInfo(String id) {
-		super("课程");
+
+	public void init(String id) {
 		this.id = id;
+		setTitle("成绩查询");
 		setSize(600, 400);
 		contain = new JPanel();
 		setLocation(600, 400);
 		list = new JTextArea();
 		list.setEditable(false);
 		contain.add(list);
-		
+
 		list.append("课程号" + "\t");
 		list.append("课程名" + "\t");
 		list.append("教师工号" + "\t");
@@ -62,4 +68,6 @@ public class GradeInfo extends JFrame {
 		add(contain);
 		setVisible(true);
 	}
+
+
 }
