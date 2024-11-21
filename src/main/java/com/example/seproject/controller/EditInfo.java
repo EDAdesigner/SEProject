@@ -1,6 +1,9 @@
 package com.example.seproject.controller;
 
 import com.example.seproject.Service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,33 +11,40 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
-@SuppressWarnings("serial")
+@Component
+@Lazy
 public class EditInfo extends JFrame implements ActionListener {
-	/*
-	 * 用户修改信息
-	 */
-	String id;
-	JPanel contain;
-	JButton submit;
-	JLabel name, inst, birth, pass1, pass2, major;
-	JTextField namet, instt, birtht, pass1t, pass2t, majort;
-	Checkbox check1, check2;
-	CheckboxGroup group;
-	int flag;
+	private static final long serialVersionUID = 1L;
+	private JTextField instt, namet, birtht, majort;
+	private JPasswordField pass1t, pass2t;
+	private JLabel name, birth, inst, major, pass1, pass2;
+	private JButton submit;
+	private JPanel contain;
+	private CheckboxGroup group;
+	private Checkbox check1, check2;
+	private int flag;
+	private String id;
 
-	public EditInfo(String id, int flag) {
-		super("修改信息");
-		setSize(300, 420);
-		setLocation(600, 400);
-		this.id = id;
-		this.flag = flag; // flag=0修改学生信息，flag=1修改教师信息
+	@Autowired
+	private UserService userService;
+
+	public void init(String idd, int flag) {
+		this.id = idd;
+		this.flag = flag;
+		setVisible(true);
+	}
+
+	public EditInfo() {
+		setTitle("编辑信息");
+		setLocation(300, 200);
+		setSize(300, 400);
 		contain = new JPanel();
 		contain.setLayout(null);
 		name = new JLabel("姓名");
 		birth = new JLabel("生日");
 		inst = new JLabel("学院");
 		major = new JLabel("专业");
-		pass1 = new JLabel("新密码");
+		pass1 = new JLabel("密码");
 		pass2 = new JLabel("确认密码");
 		submit = new JButton("提交");
 		group = new CheckboxGroup();
@@ -82,6 +92,13 @@ public class EditInfo extends JFrame implements ActionListener {
 		enableEvents(AWTEvent.WINDOW_EVENT_MASK);
 	}
 
+	public EditInfo(String idd, int flag) {
+		this();
+		this.id = idd;
+		this.flag = flag;
+	}
+
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == submit) {
 			if ((instt.getText().equals("")) || (birtht.getText().equals(""))
@@ -98,10 +115,8 @@ public class EditInfo extends JFrame implements ActionListener {
 					JOptionPane.showMessageDialog(null, "密码长度至少为6位！", "提示",
 							JOptionPane.INFORMATION_MESSAGE);
 				} else {
-					String gender = check1.getState() ? "male" : "female";
+					String gender = check1.getState() ? "男" : "女";
 					try {
-						// Assuming you have a UserService class to handle database operations
-						UserService userService = new UserService();
 						boolean success = false;
 						if (flag == 0) { // 学生修改信息
 							success = userService.updateStudentInfo(id, pass2t.getText(), namet.getText(), gender, birtht.getText(), instt.getText(), majort.getText());
@@ -127,7 +142,8 @@ public class EditInfo extends JFrame implements ActionListener {
 		}
 	}
 
-	public void processWindowEvent(WindowEvent e) {
+	@Override
+	protected void processWindowEvent(WindowEvent e) {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			this.dispose();
 			setVisible(false);

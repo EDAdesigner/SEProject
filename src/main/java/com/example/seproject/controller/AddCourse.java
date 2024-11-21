@@ -104,7 +104,7 @@ public class AddCourse extends JFrame implements ActionListener {
 					}
 				} catch (Exception ex) {
 					ex.printStackTrace();
-					JOptionPane.showMessageDialog(null, "添加失败", "错误", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "添加失败,请检查学号是否重复", "错误", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		}
@@ -115,5 +115,59 @@ public class AddCourse extends JFrame implements ActionListener {
 			this.dispose();
 			setVisible(false);
 		}
+	}
+
+	public void init(String idd) {
+		setTitle("增加课程");
+		setSize(400, 400);
+		setLocation(600, 400);
+		contain = new JPanel();
+		contain.setLayout(null);
+		id = new JLabel("课程号");
+		name = new JLabel("课程名");
+		gredit = new JLabel("学分");
+		classH = new JLabel("学时");
+		teacherId = new JLabel("教师");
+		teacherName = new JLabel("教师号");
+		submit = new JButton("提交");
+		idt = new JTextField();
+		namet = new JTextField();
+		greditt = new JTextField();
+		classHt = new JTextField();
+		teacherIdt = new JTextField();
+		teacherNamet = new JTextField();
+
+		id.setBounds(42, 35, 75, 35);
+		idt.setBounds(80, 35, 150, 35);
+		name.setBounds(40, 90, 75, 35);
+		namet.setBounds(80, 90, 150, 35);
+		gredit.setBounds(45, 145, 75, 35);
+		greditt.setBounds(80, 145, 150, 35);
+		classH.setBounds(45, 200, 75, 35);
+		classHt.setBounds(80, 200, 150, 35);
+		teacherId.setBounds(45, 245, 75, 35);
+		teacherIdt.setBounds(85, 245, 150, 35);
+		teacherName.setBounds(45, 280, 75, 35);
+		teacherNamet.setBounds(80, 280, 75, 35);
+		submit.setBounds(102, 320, 70, 30);
+
+		contain.add(id);
+		contain.add(idt);
+		contain.add(name);
+		contain.add(namet);
+		contain.add(gredit);
+		contain.add(greditt);
+		contain.add(classH);
+		contain.add(classHt);
+		contain.add(teacherId);
+		contain.add(teacherIdt);
+		contain.add(teacherName);
+		contain.add(teacherNamet);
+		contain.add(submit);
+
+		submit.addActionListener(this);
+		add(contain);
+		setVisible(true);
+		enableEvents(AWTEvent.WINDOW_EVENT_MASK);
 	}
 }

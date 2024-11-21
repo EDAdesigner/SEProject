@@ -2,7 +2,11 @@ package com.example.seproject.controller;
 
 
 import com.example.seproject.entity.Course;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 
+@Service
+@Lazy
 public class GradeSort {
 	/*
 	 * 教师查询学生成绩统计结果功能

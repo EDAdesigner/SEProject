@@ -2,6 +2,8 @@ package com.example.seproject.controller;
 
 import com.example.seproject.Service.GradeService;
 import com.example.seproject.entity.Grade;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 
 import javax.swing.*;
 import java.io.BufferedReader;
@@ -10,6 +12,8 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
+@Lazy
 public class GradeInfo extends JFrame { 
 	/**
 	 * 学生根据学号查询所有成绩

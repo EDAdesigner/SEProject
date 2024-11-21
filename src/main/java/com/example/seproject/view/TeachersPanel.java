@@ -1,6 +1,10 @@
 package com.example.seproject.view;
 
 import com.example.seproject.controller.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,20 +12,25 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
-
-@SuppressWarnings("serial")
+@Component
+@Lazy
 public class TeachersPanel extends JFrame implements ActionListener {
-	/*
-	 * 教师登陆后操作主界面
-	 */
+	private static final long serialVersionUID = 1L;
+	private String idd;
+	private JPanel contain;
+	private JButton infoButton, gradeButton, courseButton, editButton, courseView, sortGrade, exitButton;
 
-	String idd;
-	JPanel contain;
-	JButton infoButton, gradeButton, courseButton, editButton, courseView, sortGrade, exitButton;
+	@Autowired
+	private ApplicationContext applicationContext;
 
-	public TeachersPanel(String idd) {
-		super("教师");
+
+	public TeachersPanel() {
+		// Default constructor for Spring
+	}
+
+	public void init(String idd) {
 		this.idd = idd;
+		setTitle("教师");
 		setLocation(300, 200);
 		setSize(300, 340);
 		contain = new JPanel();
@@ -33,7 +42,6 @@ public class TeachersPanel extends JFrame implements ActionListener {
 		editButton = new JButton("修改信息");
 		courseView = new JButton("开课");
 		exitButton = new JButton("退出登录");
-
 		sortGrade = new JButton("成绩统计");
 
 		infoButton.setBounds(70, 40, 140, 30);
@@ -59,37 +67,47 @@ public class TeachersPanel extends JFrame implements ActionListener {
 		contain.add(exitButton);
 		exitButton.addActionListener(this);
 
-
 		setVisible(true);
 		enableEvents(AWTEvent.WINDOW_EVENT_MASK);
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == infoButton) {
-			new Info(idd, 0);
+			Info info = applicationContext.getBean(Info.class);
+			info.init(idd, 1);
 		}
 		if (e.getSource() == gradeButton) {
-			new GradeEnter(idd);
+			GradeEnter gradeEnter = applicationContext.getBean(GradeEnter.class);
+			gradeEnter.init(idd);
 		}
 		if (e.getSource() == courseButton) {
-			new CourseView(idd, 1);
+			CourseView courseView = applicationContext.getBean(CourseView.class);
+			courseView.init(idd, 1);
 		}
 		if (e.getSource() == editButton) {
-			new EditInfo(idd, 1);
+			EditInfo editInfo = applicationContext.getBean(EditInfo.class);
+			editInfo.init(idd, 1);
 		}
 		if (e.getSource() == courseView) {
-			new AddCourse();
+			AddCourse addCourse = applicationContext.getBean(AddCourse.class);
+			addCourse.init(idd);
 		}
-		if(e.getSource() == sortGrade){
-			new SortGradeFrame();
+		if (e.getSource() == sortGrade) {
+			SortGradeFrame sortGradeFrame = applicationContext.getBean(SortGradeFrame.class);
+			sortGradeFrame.init();
 		}
-		if(e.getSource() == exitButton){
+		if (e.getSource() == exitButton) {
 			this.dispose();
-			new MainFrame();
+			MainFrame mainFrame = ApplicationContextProvider.getApplicationContext().getBean(MainFrame.class);
+			mainFrame.setVisible(true);
 		}
 	}
 
-	public void processWindowEvent(WindowEvent e) {
+
+
+	@Override
+	protected void processWindowEvent(WindowEvent e) {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			this.dispose();
 			setVisible(false);

@@ -2,6 +2,9 @@ package com.example.seproject.controller;
 
 
 import com.example.seproject.Service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,19 +12,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
+@Service
+@Lazy
 public class DeleteUser extends JFrame implements ActionListener {
 	/**
 	 * 管理员删除用户
 	 */
-	private static final long serialVersionUID = 1L;
 	JPanel contain;
 	JLabel id;
 	JTextField idt;
 	Choice chooice;
 	JButton submit;
-	
-	String file = System.getProperty("user.dir")+"/data/";
-	// String file = "D://test//";
+
+	@Autowired
+	private UserService userService;
 
 	public DeleteUser() {
 		super("删除用户");
@@ -54,7 +58,6 @@ public class DeleteUser extends JFrame implements ActionListener {
 		if (e.getSource() == submit) {
 			String userType = (String) chooice.getSelectedItem();
 			String userId = idt.getText();
-			UserService userService = new UserService();
 
 			if (userService.checkIfUserExists(userType, userId)) {
 				userService.deleteUser(userType, userId);
@@ -70,5 +73,8 @@ public class DeleteUser extends JFrame implements ActionListener {
 			this.dispose();
 			setVisible(false);
 		}
+	}
+
+	public void init() {
 	}
 }
