@@ -1,8 +1,13 @@
 package com.example.seproject.view;
 
 import com.example.seproject.controller.AddUser;
+import com.example.seproject.controller.ApplicationContextProvider;
 import com.example.seproject.controller.DeleteUser;
 import com.example.seproject.controller.EditInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,15 +15,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
-@SuppressWarnings("serial")
+@Component
+@Lazy
 public class AdministratorPanel extends JFrame implements ActionListener {
-	JButton deleteUser, addUser, selfInfo, logout;
-	JPanel contain;
-	String idd;
+	private static final long serialVersionUID = 1L;
+	private JButton deleteUser, addUser, selfInfo, logout;
+	private JPanel contain;
+	private String idd;
 
-	public AdministratorPanel(String idd) {
-		super("系统管理员");
+	@Autowired
+	private ApplicationContext applicationContext;
+
+	public AdministratorPanel() {
+		// Default constructor for Spring
+	}
+
+	public void init(String idd) {
 		this.idd = idd;
+		setTitle("系统管理员");
 		setLocation(300, 200);
 		setSize(300, 340);
 		contain = new JPanel();
@@ -44,20 +58,26 @@ public class AdministratorPanel extends JFrame implements ActionListener {
 		enableEvents(AWTEvent.WINDOW_EVENT_MASK);
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == addUser) {
-			new AddUser();
+			AddUser addUser = applicationContext.getBean(AddUser.class);
+			addUser.init();
 		} else if (e.getSource() == deleteUser) {
-			new DeleteUser();
+			DeleteUser deleteUser = applicationContext.getBean(DeleteUser.class);
+			deleteUser.init();
 		} else if (e.getSource() == selfInfo) {
-			new EditInfo(idd, 3);
+			EditInfo editInfo = applicationContext.getBean(EditInfo.class);
+			editInfo.init(idd, 3);
 		} else if (e.getSource() == logout) {
 			this.dispose();
-			new MainFrame();
+			MainFrame mainFrame = ApplicationContextProvider.getApplicationContext().getBean(MainFrame.class);
+			mainFrame.setVisible(true);
 		}
 	}
 
-	public void processWindowEvent(WindowEvent e) {
+	@Override
+	protected void processWindowEvent(WindowEvent e) {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			this.dispose();
 			setVisible(false);

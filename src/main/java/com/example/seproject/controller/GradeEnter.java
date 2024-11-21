@@ -15,8 +15,11 @@ import com.example.seproject.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 @SuppressWarnings("serial")
+@Service
+@Lazy
 public class GradeEnter extends JFrame implements ActionListener {
 	/*
 	 * 教师登陆课程信息
@@ -141,5 +144,27 @@ public class GradeEnter extends JFrame implements ActionListener {
 			this.dispose();
 			setVisible(false);
 		}
+	}
+
+	public void init(String idd) {
+		this.idd = idd;
+		setTitle("查看");
+		setSize(300, 340);
+		setLocation(600, 400);
+		contain = new JPanel();
+		contain.setLayout(null);
+		add(contain);
+		id = new JLabel("课程号");
+		idt = new JTextField();
+		submit = new JButton("提交");
+		id.setBounds(38, 50, 75, 35);
+		idt.setBounds(80, 50, 150, 35);
+		submit.setBounds(102, 125, 70, 30);
+		contain.add(id);
+		contain.add(idt);
+		contain.add(submit);
+		submit.addActionListener(this);
+		setVisible(true);
+		enableEvents(AWTEvent.WINDOW_EVENT_MASK);
 	}
 }

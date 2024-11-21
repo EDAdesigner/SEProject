@@ -2,6 +2,8 @@ package com.example.seproject.controller;
 
 import com.example.seproject.Service.CourseService;
 import com.example.seproject.Service.EnrollmentService;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,6 +13,8 @@ import java.awt.event.WindowEvent;
 import java.io.*;
 
 @SuppressWarnings("serial")
+@Service
+@Lazy
 public class SelectCourse extends JFrame implements ActionListener {
     JPanel contain;
     JButton submit;

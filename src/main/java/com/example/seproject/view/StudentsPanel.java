@@ -1,6 +1,10 @@
 package com.example.seproject.view;
 
 import com.example.seproject.controller.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,15 +12,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
-@SuppressWarnings("serial")
+@Component
+@Lazy
 public class StudentsPanel extends JFrame implements ActionListener {
-	JPanel contain;
-	String id;
-	JButton infoButton, gradeButton, courseButton, editButton, selectCourseButton, dropCourseButton, exitButton;
+	private static final long serialVersionUID = 1L;
+	private JPanel contain;
+	private String id;
+	private JButton infoButton, gradeButton, courseButton, editButton, selectCourseButton, dropCourseButton, exitButton;
 
-	public StudentsPanel(String id) {
-		super("学生");
+	@Autowired
+	private ApplicationContext applicationContext;
+
+	public StudentsPanel() {
+		// Default constructor for Spring
+	}
+
+	public void init(String id) {
 		this.id = id;
+		setTitle("学生");
 		setLocation(300, 200);
 		setSize(300, 400);
 		contain = new JPanel();
@@ -58,18 +71,23 @@ public class StudentsPanel extends JFrame implements ActionListener {
 		enableEvents(AWTEvent.WINDOW_EVENT_MASK);
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == infoButton) {
-			new Info(id, 1);
+			Info info = applicationContext.getBean(Info.class);
+			info.init(id, 1);
 		}
 		if (e.getSource() == gradeButton) {
-			new GradeInfo(id);
+			GradeEnter gradeEnter = applicationContext.getBean(GradeEnter.class);
+			gradeEnter.init(id);
 		}
 		if (e.getSource() == courseButton) {
-			new CourseView(id, 0);
+			CourseView courseView = applicationContext.getBean(CourseView.class);
+			courseView.init(id, 0);
 		}
 		if (e.getSource() == editButton) {
-			new EditInfo(id, 0);
+			EditInfo editInfo = applicationContext.getBean(EditInfo.class);
+			editInfo.init(id, 0);
 		}
 		if (e.getSource() == selectCourseButton) {
 			new SelectCourse(id);
@@ -79,11 +97,14 @@ public class StudentsPanel extends JFrame implements ActionListener {
 		}
 		if (e.getSource() == exitButton) {
 			this.dispose();
-			new MainFrame();
+			// Use Spring to get MainFrame bean
+			MainFrame mainFrame = ApplicationContextProvider.getApplicationContext().getBean(MainFrame.class);
+			mainFrame.setVisible(true);
 		}
 	}
 
-	public void processWindowEvent(WindowEvent e) {
+	@Override
+	protected void processWindowEvent(WindowEvent e) {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			this.dispose();
 			setVisible(false);

@@ -1,6 +1,9 @@
 package com.example.seproject.view;
 
 import com.example.seproject.controller.GradeSort;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,6 +11,8 @@ import java.awt.event.ActionListener;
 
 
 @SuppressWarnings("serial")
+@Component
+@Lazy
 public class SortGradeFrame extends JFrame implements ActionListener{
 	
 	JPanel contain;
@@ -148,8 +153,55 @@ public class SortGradeFrame extends JFrame implements ActionListener{
 		fm.setVisible(true);
 		
 	}
-	
-	
-	
-	
+
+
+	public void init() {
+		setTitle("输入课程号和成绩标准");
+		setSize(300, 300);
+		setLocation(600, 400);
+		contain = new JPanel();
+		contain.setLayout(null);
+		add(contain);
+		id = new JLabel("课程号");
+		idt = new JTextField();
+
+		pass = new JLabel("及格");
+		passt = new JTextField();
+		good = new JLabel("良好");
+		goodt = new JTextField();
+		excellent = new JLabel("优秀");
+		excellentt = new JTextField();
+
+		submit = new JButton("提交");
+		id.setBounds(38, 50, 75, 35);
+		idt.setBounds(80, 50, 150, 35);
+
+		pass.setBounds(38, 90, 75, 35);
+		passt.setBounds(80, 90, 150, 35);
+		good.setBounds(38, 130, 75, 35);
+		goodt.setBounds(80, 130, 150, 35);
+		excellent.setBounds(38, 170, 75, 35);
+		excellentt.setBounds(80, 170, 150, 35);
+
+		submit.setBounds(102, 210, 70, 30);
+		contain.add(id);
+		contain.add(idt);
+
+		contain.add(pass);
+		contain.add(passt);
+		contain.add(good);
+		contain.add(goodt);
+		contain.add(excellent);
+		contain.add(excellentt);
+
+		contain.add(submit);
+		submit.addActionListener(this);
+		setVisible(true);
+		enableEvents(AWTEvent.WINDOW_EVENT_MASK);
+
+		idt.setText("");
+		passt.setText("");
+		goodt.setText("");
+		excellentt.setText("");
+	}
 }

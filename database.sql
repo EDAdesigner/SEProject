@@ -37,7 +37,7 @@ CREATE TABLE grade (
                        student_id VARCHAR(50) NOT NULL,
                        course_id VARCHAR(50) NOT NULL,
                        grade FLOAT,
-                       FOREIGN KEY (student_id) REFERENCES user(user_id),
+                       FOREIGN KEY (student_id) REFERENCES user(id),
                        FOREIGN KEY (course_id) REFERENCES courses(course_id)
 );
 
