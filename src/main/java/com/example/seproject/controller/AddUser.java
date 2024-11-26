@@ -1,10 +1,10 @@
 package com.example.seproject.controller;
 
+import com.example.seproject.Service.UserService;
 import com.example.seproject.entity.User;
 import com.example.seproject.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.swing.*;
@@ -27,8 +27,84 @@ public class AddUser extends JFrame implements ActionListener {
 
 	@Autowired
 	private UserMapper userMapper;
+	@Autowired
+	private UserService userService;
+
 
 	public AddUser() {
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == submit) {
+			if ((idt.getText().equals("")) || (namet.getText().equals("")) || (birthdayt.getText().equals(""))
+					|| (institutet.getText().equals("")) || (majort.getText().equals(""))) {
+				JOptionPane.showMessageDialog(null, "信息不能为空！", "提示", JOptionPane.INFORMATION_MESSAGE);
+			} else {
+				String ch = (String) chooice.getSelectedItem();
+				try {
+					if (ch.equals("student")) {
+						if (checkIfUserExists("student", idt.getText())) {
+							JOptionPane.showMessageDialog(null, "此学生已经存在！", "提示", JOptionPane.INFORMATION_MESSAGE);
+						} else {
+							addUserToDatabase("student", idt.getText(), namet.getText(), getSelectedGender(), birthdayt.getText(), institutet.getText(), majort.getText());
+							JOptionPane.showMessageDialog(null, "成功添加一个学生！", "提示", JOptionPane.INFORMATION_MESSAGE);
+						}
+					} else if (ch.equals("teacher")) {
+						if (checkIfUserExists("teacher", idt.getText())) {
+							JOptionPane.showMessageDialog(null, "此教师已经存在！", "提示", JOptionPane.INFORMATION_MESSAGE);
+						} else {
+							addUserToDatabase("teacher", idt.getText(), namet.getText(), getSelectedGender(), birthdayt.getText(), institutet.getText(), majort.getText());
+							JOptionPane.showMessageDialog(null, "成功添加一个教师！", "提示", JOptionPane.INFORMATION_MESSAGE);
+						}
+					} else {
+						if (checkIfUserExists("administrator", idt.getText())) {
+							JOptionPane.showMessageDialog(null, "此教务员已经存在！", "提示", JOptionPane.INFORMATION_MESSAGE);
+						} else {
+							addUserToDatabase("administrator", idt.getText(), namet.getText(), getSelectedGender(), birthdayt.getText(), institutet.getText(), majort.getText());
+							JOptionPane.showMessageDialog(null, "成功添加一个教务员！", "提示", JOptionPane.INFORMATION_MESSAGE);
+						}
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					JOptionPane.showMessageDialog(null, "添加失败", "错误", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		}
+	}
+
+	public boolean checkIfUserExists(String userType, String userId) {
+		try {
+			User user = userMapper.findUserByIdAndType(userId, userType);
+			return user != null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public void addUserToDatabase(String userType, String userId, String name, String gender, String birthday, String institute, String major) {
+		try {
+			userMapper.insertUser(new User(userId,userService.encode("123456"), name, gender, birthday, institute, major, userType));
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("Error adding user to database", e);
+		}
+	}
+
+	public String getSelectedGender() {
+		return group.getSelectedCheckbox().getLabel();
+	}
+
+	@Override
+	protected void processWindowEvent(WindowEvent e) {
+		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+			this.dispose();
+			setVisible(false);
+		}
+	}
+
+	public void init() {
 		setTitle("添加用户");
 		setLocation(300, 200);
 		setSize(300, 340);
@@ -84,78 +160,5 @@ public class AddUser extends JFrame implements ActionListener {
 		add(contain);
 		setVisible(true);
 		enableEvents(AWTEvent.WINDOW_EVENT_MASK);
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == submit) {
-			if ((idt.getText().equals("")) || (namet.getText().equals("")) || (birthdayt.getText().equals(""))
-					|| (institutet.getText().equals("")) || (majort.getText().equals(""))) {
-				JOptionPane.showMessageDialog(null, "信息不能为空！", "提示", JOptionPane.INFORMATION_MESSAGE);
-			} else {
-				String ch = (String) chooice.getSelectedItem();
-				try {
-					if (ch.equals("student")) {
-						if (checkIfUserExists("student", idt.getText())) {
-							JOptionPane.showMessageDialog(null, "此学生已经存在！", "提示", JOptionPane.INFORMATION_MESSAGE);
-						} else {
-							addUserToDatabase("student", idt.getText(), namet.getText(), getSelectedGender(), birthdayt.getText(), institutet.getText(), majort.getText());
-							JOptionPane.showMessageDialog(null, "成功添加一个学生！", "提示", JOptionPane.INFORMATION_MESSAGE);
-						}
-					} else if (ch.equals("teacher")) {
-						if (checkIfUserExists("teacher", idt.getText())) {
-							JOptionPane.showMessageDialog(null, "此教师已经存在！", "提示", JOptionPane.INFORMATION_MESSAGE);
-						} else {
-							addUserToDatabase("teacher", idt.getText(), namet.getText(), getSelectedGender(), birthdayt.getText(), institutet.getText(), majort.getText());
-							JOptionPane.showMessageDialog(null, "成功添加一个教师！", "提示", JOptionPane.INFORMATION_MESSAGE);
-						}
-					} else {
-						if (checkIfUserExists("administrator", idt.getText())) {
-							JOptionPane.showMessageDialog(null, "此教务员已经存在！", "提示", JOptionPane.INFORMATION_MESSAGE);
-						} else {
-							addUserToDatabase("administrator", idt.getText(), namet.getText(), getSelectedGender(), birthdayt.getText(), institutet.getText(), majort.getText());
-							JOptionPane.showMessageDialog(null, "成功添加一个教务员！", "提示", JOptionPane.INFORMATION_MESSAGE);
-						}
-					}
-				} catch (Exception ex) {
-					ex.printStackTrace();
-					JOptionPane.showMessageDialog(null, "添加失败", "错误", JOptionPane.ERROR_MESSAGE);
-				}
-			}
-		}
-	}
-
-	public boolean checkIfUserExists(String userType, String userId) {
-		try {
-			User user = userMapper.findUserByIdAndType(userId, userType);
-			return user != null;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
-
-	public void addUserToDatabase(String userType, String userId, String name, String gender, String birthday, String institute, String major) {
-		try {
-			userMapper.insertUser(new User(userId, "123456", name, gender, birthday, institute, major, userType));
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("Error adding user to database", e);
-		}
-	}
-
-	public String getSelectedGender() {
-		return group.getSelectedCheckbox().getLabel();
-	}
-
-	@Override
-	protected void processWindowEvent(WindowEvent e) {
-		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-			this.dispose();
-			setVisible(false);
-		}
-	}
-
-	public void init() {
 	}
 }

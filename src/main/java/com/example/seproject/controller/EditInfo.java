@@ -1,7 +1,9 @@
 package com.example.seproject.controller;
 
 import com.example.seproject.Service.UserService;
+import com.example.seproject.view.AdministratorPanel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
@@ -27,10 +29,52 @@ public class EditInfo extends JFrame implements ActionListener {
 
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private ApplicationContext applicationContext;
 
-	public void init(String idd, int flag) {
-		this.id = idd;
+	public void init(String id, int flag) {
+		this.id = id;
 		this.flag = flag;
+		if(flag == 1){
+			instt.setText(userService.findUserByIdAndType(id,"teacher").getInstitute());
+			namet.setText(userService.findUserByIdAndType(id,"teacher").getName());
+			birtht.setText(userService.findUserByIdAndType(id,"teacher").getBirthday());
+			majort.setText(userService.findUserByIdAndType(id,"teacher").getMajor());
+			String check = userService.findUserByIdAndType(id,"teacher").getGender();
+			if(check.equals("男")){
+				check1.setState(true);
+				check2.setState(false);
+			}else {
+				check1.setState(false);
+				check2.setState(true);
+			}
+		}else if(flag == 0){
+			instt.setText(userService.findUserByIdAndType(id,"student").getInstitute());
+			namet.setText(userService.findUserByIdAndType(id,"student").getName());
+			birtht.setText(userService.findUserByIdAndType(id,"student").getBirthday());
+			majort.setText(userService.findUserByIdAndType(id,"student").getMajor());
+			String check = userService.findUserByIdAndType(id,"student").getGender();
+			if(check.equals("男")){
+				check1.setState(true);
+				check2.setState(false);
+			}else {
+				check1.setState(false);
+				check2.setState(true);
+			}
+		}else if(flag == 3){
+			instt.setText(userService.findUserByIdAndType(id,"administrator").getInstitute());
+			namet.setText(userService.findUserByIdAndType(id,"administrator").getName());
+			birtht.setText(userService.findUserByIdAndType(id,"administrator").getBirthday());
+			majort.setText(userService.findUserByIdAndType(id,"administrator").getMajor());
+			String check = userService.findUserByIdAndType(id,"administrator").getGender();
+			if(check.equals("男")){
+				check1.setState(true);
+				check2.setState(false);
+			}else {
+				check1.setState(false);
+				check2.setState(true);
+			}
+		}
 		setVisible(true);
 	}
 
@@ -44,12 +88,12 @@ public class EditInfo extends JFrame implements ActionListener {
 		birth = new JLabel("生日");
 		inst = new JLabel("学院");
 		major = new JLabel("专业");
-		pass1 = new JLabel("密码");
+		pass1 = new JLabel("新密码");
 		pass2 = new JLabel("确认密码");
 		submit = new JButton("提交");
 		group = new CheckboxGroup();
-		check1 = new Checkbox("male", group, true);
-		check2 = new Checkbox("female", group, false);
+		check1 = new Checkbox("男", group, true);
+		check2 = new Checkbox("女", group, false);
 		instt = new JTextField();
 		namet = new JTextField();
 		birtht = new JTextField();
@@ -147,6 +191,8 @@ public class EditInfo extends JFrame implements ActionListener {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			this.dispose();
 			setVisible(false);
+			AdministratorPanel administratorPanel = applicationContext.getBean(AdministratorPanel.class);
+			administratorPanel.init(id);
 		}
 	}
 }

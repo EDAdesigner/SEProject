@@ -6,7 +6,6 @@ import com.example.seproject.controller.DeleteUser;
 import com.example.seproject.controller.EditInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
@@ -16,12 +15,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
 @Component
-@Lazy
 public class AdministratorPanel extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private JButton deleteUser, addUser, selfInfo, logout;
 	private JPanel contain;
-	private String idd;
+	private String id;
+
 
 	@Autowired
 	private ApplicationContext applicationContext;
@@ -30,8 +29,8 @@ public class AdministratorPanel extends JFrame implements ActionListener {
 		// Default constructor for Spring
 	}
 
-	public void init(String idd) {
-		this.idd = idd;
+	public void init(String id) {
+		this.id = id;
 		setTitle("系统管理员");
 		setLocation(300, 200);
 		setSize(300, 340);
@@ -68,7 +67,7 @@ public class AdministratorPanel extends JFrame implements ActionListener {
 			deleteUser.init();
 		} else if (e.getSource() == selfInfo) {
 			EditInfo editInfo = applicationContext.getBean(EditInfo.class);
-			editInfo.init(idd, 3);
+			editInfo.init(id, 3);
 		} else if (e.getSource() == logout) {
 			this.dispose();
 			MainFrame mainFrame = ApplicationContextProvider.getApplicationContext().getBean(MainFrame.class);

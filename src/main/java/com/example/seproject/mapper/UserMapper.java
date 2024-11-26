@@ -9,6 +9,9 @@ public interface UserMapper {
     @Select("SELECT * FROM user WHERE id = #{userId} AND type = #{userType}")
     User findUserByIdAndType(String userId, String userType);
 
+    @Select("SELECT * FROM user WHERE id =#{userId} AND name = #{userName}")
+    User fineUserByIdAndName(String userId, String userName);
+
     @Insert("INSERT INTO user (id, password, name, gender, birthday, institute, major, type) VALUES (#{id}, #{password}, #{name}, #{gender}, #{birthday}, #{institute}, #{major}, #{type})")
     void insertUser(User user);
 

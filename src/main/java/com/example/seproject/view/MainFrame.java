@@ -4,14 +4,12 @@ import com.example.seproject.controller.CheckInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-
 import javax.annotation.PostConstruct;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
-import java.util.Arrays;
 
 @Component
 @Lazy
@@ -21,7 +19,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JPasswordField passwdTextField;
 	private JLabel idLabel, passwdLabel;
 	private Choice chooice;
-	private JButton logon;
+	private JButton logon,forget;
 	private JPanel contain;
 	private int count = 0;
 
@@ -37,6 +35,8 @@ public class MainFrame extends JFrame implements ActionListener {
 	@Autowired
 	private AdministratorPanel administratorPanel;
 
+	@Autowired
+	private CodeForgetPanel codeForgetPanel;
 	@PostConstruct
 	public void init() {
 		setTitle("账号登陆");
@@ -49,6 +49,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		idTextField = new JTextField();
 		passwdTextField = new JPasswordField();
 		logon = new JButton("登陆");
+		forget = new JButton("忘记密码？");
 		chooice = new Choice();
 		chooice.addItem("student");
 		chooice.addItem("teacher");
@@ -59,15 +60,21 @@ public class MainFrame extends JFrame implements ActionListener {
 		passwdTextField.setBounds(80, 100, 150, 35);
 		chooice.setBounds(80, 160, 150, 35);
 		logon.setBounds(102, 220, 70, 30);
+		forget.setBounds(87, 250, 100, 30);
 		contain.add(idLabel);
 		contain.add(idTextField);
 		contain.add(passwdLabel);
 		contain.add(passwdTextField);
 		contain.add(chooice);
 		contain.add(logon);
+		contain.add(forget);
 		logon.addActionListener(this);
+		forget.addActionListener(this);
 		add(contain);
 		setVisible(true);
+
+
+
 		enableEvents(AWTEvent.WINDOW_EVENT_MASK);
 	}
 
@@ -97,6 +104,9 @@ public class MainFrame extends JFrame implements ActionListener {
 					handleLoginFailure();
 				}
 			}
+		}else if(e.getSource() == forget){
+			setVisible(false);
+			codeForgetPanel.init();
 		}
 	}
 
