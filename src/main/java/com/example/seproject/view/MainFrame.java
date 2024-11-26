@@ -4,6 +4,7 @@ import com.example.seproject.controller.CheckInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+
 import javax.annotation.PostConstruct;
 import javax.swing.*;
 import java.awt.*;
@@ -35,10 +36,17 @@ public class MainFrame extends JFrame implements ActionListener {
 	@Autowired
 	private AdministratorPanel administratorPanel;
 
+//	@Autowired
+//	private AddUser addUser;
+
 	@Autowired
 	private CodeForgetPanel codeForgetPanel;
 	@PostConstruct
 	public void init() {
+
+//		addUser.addUserToDatabase("administrator","001","管理员","男","000","未知","未知");
+//		由于密码加密原因，若想在其他电脑上运行程序，将上面两行注释掉的代码取消注释，然后以账号001，密码123456，administrator身份登录，之后进行相关操作即可。
+
 		setTitle("账号登陆");
 		setLocation(300, 200);
 		setSize(300, 340);
