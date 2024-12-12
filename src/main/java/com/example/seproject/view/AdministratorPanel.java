@@ -28,7 +28,6 @@ public class AdministratorPanel extends JFrame implements ActionListener {
 	public AdministratorPanel() {
 		// Default constructor for Spring
 	}
-
 	public void init(String id) {
 		this.id = id;
 		setTitle("系统管理员");

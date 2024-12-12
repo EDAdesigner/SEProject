@@ -31,9 +31,9 @@ public class CourseService {
         return courseMapper.findCourseById(courseId);
     }
 
-    public void insertCourse(Course course) {
+    /*public void insertCourse(Course course) {
         courseMapper.insertCourse(course);
-    }
+    }*/
 
     public boolean dropCourse(String studentId, String courseId) {
         try {

@@ -21,7 +21,6 @@ public class AddCourse extends JFrame implements ActionListener {
 	/*
 	 * 教师增加课程
 	 */
-
 	@Autowired
 	private CourseMapper courseMapper;
 	
@@ -41,7 +40,7 @@ public class AddCourse extends JFrame implements ActionListener {
 					if (existingCourse != null) {
 						JOptionPane.showMessageDialog(null, "此课程已经存在！", "提示", JOptionPane.INFORMATION_MESSAGE);
 					} else {
-						Course course = new Course(idt.getText(), namet.getText(), greditt.getText(), classHt.getText(), Integer.parseInt(teacherIdt.getText()), Integer.parseInt(teacherNamet.getText()));;
+						Course course = new Course(idt.getText(), namet.getText(), teacherIdt.getText(), teacherNamet.getText(), Integer.parseInt(greditt.getText()), Integer.parseInt(classHt.getText()));;
 						courseMapper.insertCourse(course);
 						JOptionPane.showMessageDialog(null, "添加成功", "提示", JOptionPane.INFORMATION_MESSAGE);
 					}
